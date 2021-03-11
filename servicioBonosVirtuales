@@ -1,0 +1,308 @@
+---
+swagger: "2.0"
+info:
+  description: "Este servicio permite realizar la invocaciónde las siguientes operaciones:\
+    \  Creación Bono Virtual, Activación y carga del Bono Virtual y Recuperación de\
+    \ Bono Virtual."
+  version: 1.0.0
+  title: ServicioBonosVirtuales
+tags:
+- name: bonos
+  description: Servicio Bonos Virtuales
+schemes:
+- https
+consumes:
+- application/json
+produces:
+- application/json
+paths:
+  /servicios/bonos/gestionBonos/crearBono:
+    post:
+      tags:
+      - bonos
+      summary: Permite crear el bono
+      description: Permite crear el bono
+      operationId: crearBono
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: crearBono
+        required: true
+        schema:
+          $ref: '#/definitions/CrearBono'
+      responses:
+        "200":
+          description: Consulta arroja resultados de busqueda
+          schema:
+            $ref: '#/definitions/CrearBonoRespuesta'
+        "400":
+          description: Consulta no arroja resultados
+        "401":
+          description: "Peticion invalida, datos incorrectos"
+        "404":
+          description: Recurso no encotrado
+        "500":
+          description: Error en el Servidor
+        "501":
+          description: Error inesperado
+      security:
+      - BasicAuth: []
+  /servicios/bonos/gestionBonos/activarBono:
+    put:
+      tags:
+      - bonos
+      summary: Permite activar y cargar el bono
+      description: Permite activar y cargar el bono
+      operationId: activarBono
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: activarBono
+        required: true
+        schema:
+          $ref: '#/definitions/ActivaCargaBono'
+      responses:
+        "200":
+          description: Consulta arroja resultados de busqueda
+          schema:
+            $ref: '#/definitions/ActivaCargaBonoRespuesta'
+        "400":
+          description: Consulta no arroja resultados
+        "401":
+          description: "Peticion invalida, datos incorrectos"
+        "404":
+          description: Recurso no encotrado
+        "500":
+          description: Error en el Servidor
+        "501":
+          description: Error inesperado
+      security:
+      - BasicAuth: []
+  /servicios/bonos/gestionBonos/recuperarBono:
+    post:
+      tags:
+      - bonos
+      summary: Permite recuperar el bono
+      description: Permite recuperar el bono
+      operationId: recuperarBono
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: recuperarBono
+        required: true
+        schema:
+          $ref: '#/definitions/RecuperarBono'
+      responses:
+        "200":
+          description: Consulta arroja resultados de busqueda
+          schema:
+            $ref: '#/definitions/RecuperarBonoRespuesta'
+        "400":
+          description: Consulta no arroja resultados
+        "401":
+          description: "Peticion invalida, datos incorrectos"
+        "404":
+          description: Recurso no encotrado
+        "500":
+          description: Error en el Servidor
+        "501":
+          description: Error inesperado
+      security:
+      - BasicAuth: []
+securityDefinitions:
+  BasicAuth:
+    type: basic
+definitions:
+  CrearBono:
+    type: object
+    properties:
+      bin:
+        type: number
+      nit:
+        type: number
+      subtipo:
+        type: string
+        minLength: 3
+        maxLength: 3
+      tipoDocumento:
+        type: string
+        enum:
+        - CC
+        - NI
+        - CE
+        - TI
+        - PS
+        - NU
+        - RC
+      numeroDocumento:
+        type: integer
+      nombre:
+        type: string
+        minLength: 5
+        maxLength: 25
+    example:
+      bin: 516486
+      nit: 456987482
+      subtipo: A21
+      tipoDocumento: CC
+      numeroDocumento: 156846
+      nombre: NOMBRE APELLIDO
+  ActivaCargaBono:
+    type: object
+    properties:
+      bin:
+        type: number
+      nit:
+        type: number
+      subtipo:
+        type: string
+        minLength: 3
+        maxLength: 3
+      numeroBono:
+        type: string
+        minLength: 13
+        maxLength: 19
+      valorCarga:
+        type: number
+      numeroAuditoria:
+        type: number
+      consecutivo:
+        type: number
+    example:
+      bin: 516486
+      nit: 456987482
+      subtipo: A21
+      numeroBono: V654A1546B654863698
+      valorCarga: 120000
+      numeroAuditoria: 654189
+      consecutivo: 54321
+  RecuperarBono:
+    type: object
+    properties:
+      bin:
+        type: number
+      nit:
+        type: number
+      subtipo:
+        type: string
+        minLength: 3
+        maxLength: 3
+      tipoDocumento:
+        type: string
+        enum:
+        - CC
+        - NI
+        - CE
+        - TI
+        - PS
+        - NU
+        - RC
+      numeroDocumento:
+        type: number
+    example:
+      bin: 516486
+      nit: 456987482
+      subtipo: A21
+      tipoDocumento: CC
+      numeroDocumento: 65412135
+  CrearBonoRespuesta:
+    type: object
+    properties:
+      numeroBono:
+        type: string
+        minLength: 13
+        maxLength: 19
+      codigoRespuesta:
+        type: string
+        minLength: 2
+        maxLength: 2
+      descripcionRespuesta:
+        type: string
+        maxLength: 75
+    example:
+      numeroBono: R68944861E6TB9S88FA
+      codigoRespuesta: A2
+      descripcionRespuesta: DESCRIPCION RESPUESTA
+  Bono:
+    type: object
+    properties:
+      numero:
+        type: string
+        minLength: 19
+        maxLength: 19
+      valor:
+        type: number
+    example:
+      numero: R68944861E6TB9S88FA
+      valor: 100000
+      mensaje: mensaje
+  ActivaCargaBonoRespuesta:
+    type: object
+    properties:
+      numeroAutorizacion:
+        type: number
+      tipoDocumento:
+        type: string
+        minLength: 2
+        maxLength: 2
+        enum:
+        - CC
+        - NI
+        - CE
+        - TI
+        - PS
+        - NU
+        - RC
+      numeroDocumento:
+        type: number
+      nombreCliente:
+        type: string
+        minLength: 5
+        maxLength: 25
+      numeroCuenta:
+        type: string
+        maxLength: 19
+      estado:
+        type: string
+        minLength: 1
+        maxLength: 1
+      codigoRespuesta:
+        type: string
+        minLength: 2
+        maxLength: 2
+      descripcionRespuesta:
+        type: string
+        maxLength: 75
+    example:
+      numeroAutorizacion: 198765
+      tipoDocumento: CC
+      numeroDocumento: 68498752
+      nombreCliente: NOMBRE CLIENTE
+      numeroCuenta: E165846658T8RC879Y8
+      estado: A
+      codigoRespuesta: A2
+      descripcionRespuesta: DESCRIPCION RESPUESTA
+  RecuperarBonoRespuesta:
+    type: object
+    properties:
+      codigoRespuesta:
+        type: string
+        minLength: 2
+        maxLength: 2
+      descripcionRespuesta:
+        type: string
+        minLength: 75
+        maxLength: 75
+      bonos:
+        type: array
+        items:
+          $ref: '#/definitions/Bono'
